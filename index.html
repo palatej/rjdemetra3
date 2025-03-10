@@ -5,150 +5,198 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="description" content="Interface around JDemetra+ 3.x (&lt;https://github.com/jdemetra/jdemetra-app&gt;).
-    It offers several functions to manipulate JDemetra+ workspaces, which can be read by the software
-    and can store several seasonal adjusted series along with user-defined calendars or regression variables.">
-<title>Interface to JDemetra+ 3.0 Seasonal Adjustment Software • rjdemetra3</title>
+<title>Interface to JDemetra+ 3.x time series analysis software • rjd3workspace</title>
+<!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="apple-touch-icon.png">
+<link rel="apple-touch-icon" type="image/png" sizes="120x120" href="apple-touch-icon-120x120.png">
+<link rel="apple-touch-icon" type="image/png" sizes="76x76" href="apple-touch-icon-76x76.png">
+<link rel="apple-touch-icon" type="image/png" sizes="60x60" href="apple-touch-icon-60x60.png">
 <script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
-<!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Interface to JDemetra+ 3.0 Seasonal Adjustment Software">
-<meta property="og:description" content="Interface around JDemetra+ 3.x (&lt;https://github.com/jdemetra/jdemetra-app&gt;).
-    It offers several functions to manipulate JDemetra+ workspaces, which can be read by the software
-    and can store several seasonal adjusted series along with user-defined calendars or regression variables.">
-<!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
-<script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-<![endif]-->
+<script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
+<script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Interface to JDemetra+ 3.x time series analysis software">
+<meta name="description" content="R Interface to JDemetra+ 3.x (&lt;https://github.com/jdemetra&gt;). It offers several functions to manipulate JDemetra+ workspaces, which can be read by the software and can store several seasonal adjusted series along with user-defined calendars or regression variables.">
+<meta property="og:description" content="R Interface to JDemetra+ 3.x (&lt;https://github.com/jdemetra&gt;). It offers several functions to manipulate JDemetra+ workspaces, which can be read by the software and can store several seasonal adjusted series along with user-defined calendars or regression variables.">
+<meta property="og:image" content="/logo.svg">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
-    
 
-    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light"><div class="container">
-    
-    <a class="navbar-brand me-2" href="index.html">rjdemetra3</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.2.3</small>
+    <nav class="navbar navbar-expand-lg fixed-top bg-light" data-bs-theme="light" aria-label="Site navigation"><div class="container">
 
-    
+    <a class="navbar-brand me-2" href="index.html">rjd3workspace</a>
+
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.2.4.9000</small>
+
+
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
-<li class="nav-item">
-  <a class="nav-link" href="reference/index.html">Reference</a>
-</li>
+<li class="nav-item"><a class="nav-link" href="reference/index.html">Reference</a></li>
+<li class="nav-item"><a class="nav-link" href="news/index.html">Changelog</a></li>
       </ul>
-<form class="form-inline my-2 my-lg-0" role="search">
-        <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="search.json" id="search-input" placeholder="Search for" autocomplete="off">
-</form>
-
-      <ul class="navbar-nav">
-<li class="nav-item">
-  <a class="external-link nav-link" href="https://github.com/rjdemetra/rjdemetra3/" aria-label="github">
-    <span class="fab fa fab fa-github fa-lg"></span>
-     
-  </a>
-</li>
+<ul class="navbar-nav">
+<li class="nav-item"><form class="form-inline" role="search">
+ <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="search.json">
+</form></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/rjdverse/rjd3workspace/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul>
 </div>
 
-    
+
   </div>
 </nav><div class="container template-home">
 <div class="row">
   <main id="main" class="col-md-9"><div class="section level1">
-<div class="page-header"><h1 id="rjdemetra3">rjdemetra3<a class="anchor" aria-label="anchor" href="#rjdemetra3"></a>
-</h1></div>
-<p><strong>rjdemetra3</strong> offers several functions to create, read and modify JDemetra+ v3.0 workspaces, a specific data structure, indispensable to use the Graphical User Interface (GUI). A workspace can be created in GUI or direclty in R.</p>
+<div class="page-header">
+<img src="logo.svg" class="logo" alt=""><h1 id="rjd3workspace-">{rjd3workspace} 
+<a class="anchor" aria-label="anchor" href="#rjd3workspace-"></a>
+</h1>
+</div>
+<!-- badges: start -->
+
+<p><a href="https://github.com/rjdverse/rjd3workspace/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/rjdverse/rjd3workspace/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a> <a href="https://github.com/rjdverse/rjd3workspace/actions/workflows/lint.yaml" class="external-link"><img src="https://github.com/rjdverse/rjd3workspace/actions/workflows/lint.yaml/badge.svg" alt="lint"></a></p>
+<p><a href="https://github.com/rjdverse/rjd3workspace/actions/workflows/pkgdown.yaml" class="external-link"><img src="https://github.com/rjdverse/rjd3workspace/actions/workflows/pkgdown.yaml/badge.svg" alt="GH Pages built"></a> <!-- badges: end --></p>
+<p><strong>{rjd3workspace}</strong> offers several functions to wrangle JDemetra+ v3.x workspaces.</p>
+<p>Seasonal adjustment with X-12ARIMA can be done with the package <a href="https://github.com/rjdverse/rjd3x13" class="external-link"><strong>{rjd3x13}</strong></a> and with TRAMO-SEATS with the package <a href="https://github.com/rjdverse/rjd3tramoseats" class="external-link"><strong>{rjd3tramoseats}</strong></a>.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
-<p><strong>rjdemetra3</strong> relies on <a href="https://CRAN.R-project.org/package=rJava" class="external-link"><strong>rJava</strong></a> package and Java SE 17 or later version is required.</p>
+<p><strong>{rjd3workspace}</strong> relies on the <a href="https://CRAN.R-project.org/package=rJava" class="external-link"><strong>{rJava}</strong></a> package</p>
+<p>Running rjd3 packages requires <strong>Java 17 or higher</strong>. How to set up such a configuration in R is explained <a href="https://jdemetra-new-documentation.netlify.app/#Rconfig" class="external-link">here</a></p>
+<div class="section level3">
+<h3 id="latest-release">Latest release<a class="anchor" aria-label="anchor" href="#latest-release"></a>
+</h3>
 <p>To get the current stable version (from the latest release):</p>
+<ul>
+<li>From GitHub:</li>
+</ul>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># install.packages</span></span>
-<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"rjdemetra/rjd3toolkit@*release"</span><span class="op">)</span></span>
-<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"rjdemetra/rjd3tramoseats@*release"</span><span class="op">)</span></span>
-<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"rjdemetra/rjd3x13@*release"</span><span class="op">)</span></span>
-<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"rjdemetra/rjd3providers@*release"</span><span class="op">)</span></span>
-<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"rjdemetra/rjdemetra3@*release"</span><span class="op">)</span></span></code></pre></div>
-<p>To get the current development version from GitHub:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># install.packages("remotes")</span></span>
-<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"rjdemetra/rjdemetra3"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"rjdverse/rjd3workspace@*release"</span><span class="op">)</span></span></code></pre></div>
+<ul>
+<li>From <a href="https://rjdverse.r-universe.dev/rjd3workspace" class="external-link">r-universe</a>:</li>
+</ul>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"rjd3workspace"</span>, repos <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"https://rjdverse.r-universe.dev"</span>, <span class="st">"https://cloud.r-project.org"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="development-version">Development version<a class="anchor" aria-label="anchor" href="#development-version"></a>
+</h3>
+<p>You can install the development version of <strong>{rjd3workspace}</strong> from <a href="https://github.com/" class="external-link">GitHub</a> with:</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># install.packages("remotes")</span></span>
+<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"rjdverse/rjd3workspace"</span><span class="op">)</span></span></code></pre></div>
+</div>
 </div>
 <div class="section level2">
 <h2 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a>
 </h2>
-<p><strong>rjdemetra3</strong> relies on the <a href="https://CRAN.R-project.org/package=rJava" class="external-link"><strong>rJava</strong></a> package and Java SE 17 or later version is required.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://github.com/rjdemetra/rjdemetra3" class="external-link">"rjdemetra3"</a></span><span class="op">)</span></span>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://github.com/rjdverse/rjd3workspace" class="external-link">"rjd3workspace"</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">dir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu">rjd3toolkit</span><span class="fu">::</span><span class="va">ABS</span><span class="op">$</span><span class="va">X0.2.09.10.M</span></span>
+<span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu">rjd3toolkit</span><span class="fu">::</span><span class="va"><a href="https://rjdverse.github.io/rjd3toolkit/reference/ABS.html" class="external-link">ABS</a></span><span class="op">$</span><span class="va">X0.2.09.10.M</span></span>
 <span><span class="va">jws</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/dot-jws_new.html">.jws_new</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="va">jsap1</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/dot-jws_new.html">.jws_sap_new</a></span><span class="op">(</span><span class="va">jws</span>, <span class="st">"sa1"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="reference/add_sa_item.html">add_sa_item</a></span><span class="op">(</span><span class="va">jsap1</span>, name <span class="op">=</span> <span class="st">"x13"</span>, x <span class="op">=</span> <span class="fu">rjd3x13</span><span class="fu">::</span><span class="fu"><a href="https://rjdemetra.github.io/rjd3x13/reference/x13.html" class="external-link">x13</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu"><a href="reference/add_sa_item.html">add_sa_item</a></span><span class="op">(</span><span class="va">jsap1</span>, name <span class="op">=</span> <span class="st">"tramo"</span>, x <span class="op">=</span> <span class="fu">rjd3tramoseats</span><span class="fu">::</span><span class="fu"><a href="https://rjdemetra.github.io/rjd3tramoseats/reference/tramoseats.html" class="external-link">tramoseats</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/add_sa_item.html">add_sa_item</a></span><span class="op">(</span><span class="va">jsap1</span>, name <span class="op">=</span> <span class="st">"x13"</span>, x <span class="op">=</span> <span class="fu">rjd3x13</span><span class="fu">::</span><span class="fu"><a href="https://rjdverse.github.io/rjd3x13/reference/x13.html" class="external-link">x13</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/add_sa_item.html">add_sa_item</a></span><span class="op">(</span><span class="va">jsap1</span>, name <span class="op">=</span> <span class="st">"tramo"</span>, x <span class="op">=</span> <span class="fu">rjd3tramoseats</span><span class="fu">::</span><span class="fu"><a href="https://rjdverse.github.io/rjd3tramoseats/reference/tramoseats.html" class="external-link">tramoseats</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="reference/save_workspace.html">save_workspace</a></span><span class="op">(</span><span class="va">jws</span>, <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">dir</span>, <span class="st">"ws.xml"</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">jws</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/dot-jws_open.html">.jws_load</a></span><span class="op">(</span>file <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">dir</span>, <span class="st">"ws.xml"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">jws</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/deprecated-rjd3workspace.html">.jws_load</a></span><span class="op">(</span>file <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">dir</span>, <span class="st">"ws.xml"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu">.jws_compute</span><span class="op">(</span><span class="va">jws</span><span class="op">)</span> <span class="co"># to compute the models</span></span>
 <span><span class="va">jsap1</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/dot-jws_sap.html">.jws_sap</a></span><span class="op">(</span><span class="va">jws</span>, idx <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="co"># first SAProcessing</span></span>
-<span><span class="va">jsa1</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/dot-jws_sap.html">.jsap_sa</a></span><span class="op">(</span><span class="va">jsap1</span>, idx <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="co"># first SAItem</span></span>
-<span><span class="fu"><a href="reference/dot-jsap_name.html">.jsa_name</a></span><span class="op">(</span><span class="va">jsa1</span><span class="op">)</span></span>
+<span><span class="va">jsa1</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/deprecated-rjd3workspace.html">.jsap_sa</a></span><span class="op">(</span><span class="va">jsap1</span>, idx <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="co"># first SAItem</span></span>
+<span><span class="fu"><a href="reference/deprecated-rjd3workspace.html">.jsa_name</a></span><span class="op">(</span><span class="va">jsa1</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "x13"</span></span>
-<span><span class="va">mod1</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/dot-jsa_read.html">.jsa_read</a></span><span class="op">(</span><span class="va">jsa1</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">mod1</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/deprecated-rjd3workspace.html">.jsa_read</a></span><span class="op">(</span><span class="va">jsa1</span><span class="op">)</span></span></code></pre></div>
 <div class="section level3">
 <h3 id="create-sa-item-with-path">Create SA-item with path<a class="anchor" aria-label="anchor" href="#create-sa-item-with-path"></a>
 </h3>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># install.packages("remotes")</span></span>
-<span><span class="co"># remotes::install_github("rjdemetra/rjd3providers")</span></span>
+<span><span class="co"># remotes::install_github("rjdverse/rjd3providers")</span></span>
 <span></span>
 <span><span class="va">dir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">xlsx_file</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"examples"</span>, package<span class="op">=</span><span class="st">"rjd3providers"</span><span class="op">)</span>, <span class="st">"/Insee.xlsx"</span><span class="op">)</span></span>
-<span><span class="va">ts1</span> <span class="op">&lt;-</span> <span class="fu">rjd3providers</span><span class="fu">::</span><span class="fu"><a href="https://rjdemetra.github.io/rjd3providers/reference/spreadsheet_series.html" class="external-link">spreadsheet_series</a></span><span class="op">(</span>file <span class="op">=</span> <span class="va">xlsx_file</span>, sheet <span class="op">=</span> <span class="fl">1L</span>, series <span class="op">=</span> <span class="fl">3L</span><span class="op">)</span></span>
+<span><span class="va">xlsx_file</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"examples"</span>, package <span class="op">=</span> <span class="st">"rjd3providers"</span><span class="op">)</span>, <span class="st">"/Insee.xlsx"</span><span class="op">)</span></span>
+<span><span class="va">ts1</span> <span class="op">&lt;-</span> <span class="fu">rjd3providers</span><span class="fu">::</span><span class="fu"><a href="https://rjdverse.github.io/rjd3providers/reference/spreadsheet_series.html" class="external-link">spreadsheet_series</a></span><span class="op">(</span>file <span class="op">=</span> <span class="va">xlsx_file</span>, sheet <span class="op">=</span> <span class="fl">1L</span>, series <span class="op">=</span> <span class="fl">3L</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">y</span> <span class="op">&lt;-</span> <span class="va">ts1</span><span class="op">$</span><span class="va">data</span></span>
 <span><span class="va">jws</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/dot-jws_new.html">.jws_new</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="va">jsap1</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/dot-jws_new.html">.jws_sap_new</a></span><span class="op">(</span><span class="va">jws</span>, <span class="st">"sa1"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="reference/add_sa_item.html">add_sa_item</a></span><span class="op">(</span><span class="va">jsap1</span>, name <span class="op">=</span> <span class="st">"x13"</span>, x <span class="op">=</span> <span class="fu">rjd3x13</span><span class="fu">::</span><span class="fu"><a href="https://rjdemetra.github.io/rjd3x13/reference/x13.html" class="external-link">x13</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu">rjdemetra3</span><span class="fu">::</span><span class="fu"><a href="reference/set_ts.html">set_ts</a></span><span class="op">(</span>jsap <span class="op">=</span> <span class="va">jsap1</span>, idx <span class="op">=</span> <span class="fl">1L</span>, y <span class="op">=</span> <span class="va">ts1</span><span class="op">)</span></span>
-<span><span class="fu"><a href="reference/add_sa_item.html">add_sa_item</a></span><span class="op">(</span><span class="va">jsap1</span>, name <span class="op">=</span> <span class="st">"tramo"</span>, x <span class="op">=</span> <span class="fu">rjd3tramoseats</span><span class="fu">::</span><span class="fu"><a href="https://rjdemetra.github.io/rjd3tramoseats/reference/tramoseats.html" class="external-link">tramoseats</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu">rjdemetra3</span><span class="fu">::</span><span class="fu"><a href="reference/set_ts.html">set_ts</a></span><span class="op">(</span>jsap <span class="op">=</span> <span class="va">jsap1</span>, idx <span class="op">=</span> <span class="fl">2L</span>, y <span class="op">=</span> <span class="va">ts1</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/add_sa_item.html">add_sa_item</a></span><span class="op">(</span><span class="va">jsap1</span>, name <span class="op">=</span> <span class="st">"x13"</span>, x <span class="op">=</span> <span class="fu">rjd3x13</span><span class="fu">::</span><span class="fu"><a href="https://rjdverse.github.io/rjd3x13/reference/x13.html" class="external-link">x13</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/set_ts.html">set_ts</a></span><span class="op">(</span>jsap <span class="op">=</span> <span class="va">jsap1</span>, idx <span class="op">=</span> <span class="fl">1L</span>, y <span class="op">=</span> <span class="va">ts1</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/add_sa_item.html">add_sa_item</a></span><span class="op">(</span><span class="va">jsap1</span>, name <span class="op">=</span> <span class="st">"tramo"</span>, x <span class="op">=</span> <span class="fu">rjd3tramoseats</span><span class="fu">::</span><span class="fu"><a href="https://rjdverse.github.io/rjd3tramoseats/reference/tramoseats.html" class="external-link">tramoseats</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/set_ts.html">set_ts</a></span><span class="op">(</span>jsap <span class="op">=</span> <span class="va">jsap1</span>, idx <span class="op">=</span> <span class="fl">2L</span>, y <span class="op">=</span> <span class="va">ts1</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="reference/save_workspace.html">save_workspace</a></span><span class="op">(</span><span class="va">jws</span>, <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">dir</span>, <span class="st">"ws.xml"</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">jws</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/dot-jws_open.html">.jws_load</a></span><span class="op">(</span>file <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">dir</span>, <span class="st">"ws.xml"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">jws</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/deprecated-rjd3workspace.html">.jws_load</a></span><span class="op">(</span>file <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">dir</span>, <span class="st">"ws.xml"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu">.jws_compute</span><span class="op">(</span><span class="va">jws</span><span class="op">)</span> <span class="co"># to compute the models</span></span>
 <span><span class="va">jsap1</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/dot-jws_sap.html">.jws_sap</a></span><span class="op">(</span><span class="va">jws</span>, idx <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="co"># first SAProcessing</span></span>
-<span><span class="va">jsa1</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/dot-jws_sap.html">.jsap_sa</a></span><span class="op">(</span><span class="va">jsap1</span>, idx <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="co"># first SAItem</span></span>
-<span><span class="fu"><a href="reference/dot-jsap_name.html">.jsa_name</a></span><span class="op">(</span><span class="va">jsa1</span><span class="op">)</span></span>
+<span><span class="va">jsa1</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/deprecated-rjd3workspace.html">.jsap_sa</a></span><span class="op">(</span><span class="va">jsap1</span>, idx <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="co"># first SAItem</span></span>
+<span><span class="fu"><a href="reference/deprecated-rjd3workspace.html">.jsa_name</a></span><span class="op">(</span><span class="va">jsa1</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "x13"</span></span>
-<span><span class="va">mod1</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/dot-jsa_read.html">.jsa_read</a></span><span class="op">(</span><span class="va">jsa1</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">mod1</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/deprecated-rjd3workspace.html">.jsa_read</a></span><span class="op">(</span><span class="va">jsa1</span><span class="op">)</span></span></code></pre></div>
 </div>
+<div class="section level3">
+<h3 id="change-path-of-an-sa-item">Change path of an SA-ITEM<a class="anchor" aria-label="anchor" href="#change-path-of-an-sa-item"></a>
+</h3>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">xlsx_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/normalizePath.html" class="external-link">normalizePath</a></span><span class="op">(</span><span class="st">"data/IPI_nace4.xlsx"</span>, mustWork <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="va">csv_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/normalizePath.html" class="external-link">normalizePath</a></span><span class="op">(</span><span class="st">"data/IPI_nace4.csv"</span>, mustWork <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="va">ws_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/normalizePath.html" class="external-link">normalizePath</a></span><span class="op">(</span><span class="st">"WS/ws_industrie.xml"</span>, mustWork <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">jws</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/dot-jws_open.html">.jws_open</a></span><span class="op">(</span>file <span class="op">=</span> <span class="va">ws_path</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Update all the second SA-Processing with a new path</span></span>
+<span><span class="fu"><a href="reference/spreadsheet_update_path.html">spreadsheet_update_path</a></span><span class="op">(</span></span>
+<span>    jws <span class="op">=</span> <span class="va">jws</span>,</span>
+<span>    new_path <span class="op">=</span> <span class="va">xlsx_path</span>,</span>
+<span>    idx_sap <span class="op">=</span> <span class="fl">2L</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="reference/txt_update_path.html">txt_update_path</a></span><span class="op">(</span></span>
+<span>    jws <span class="op">=</span> <span class="va">jws</span>,</span>
+<span>    new_path <span class="op">=</span> <span class="va">csv_path</span>,</span>
+<span>    idx_sap <span class="op">=</span> <span class="fl">1L</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="reference/save_workspace.html">save_workspace</a></span><span class="op">(</span>jws <span class="op">=</span> <span class="va">jws</span>, file <span class="op">=</span> <span class="va">ws_path</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+</div>
+</div>
+<div class="section level2">
+<h2 id="package-maintenance-and-contributing">Package Maintenance and contributing<a class="anchor" aria-label="anchor" href="#package-maintenance-and-contributing"></a>
+</h2>
+<p>Any contribution is welcome and should be done through pull requests and/or issues. pull requests should include <strong>updated tests</strong> and <strong>updated documentation</strong>. If functionality is changed, docstrings should be added or updated.</p>
+</div>
+<div class="section level2">
+<h2 id="licensing">Licensing<a class="anchor" aria-label="anchor" href="#licensing"></a>
+</h2>
+<p>The code of this project is licensed under the <a href="https://interoperable-europe.ec.europa.eu:443/collection/eupl/eupl-text-eupl-12" class="external-link">European Union Public Licence (EUPL)</a>.</p>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="links">
 <h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
-<li><a href="https://github.com/rjdemetra/rjdemetra3/" class="external-link">Browse source code</a></li>
-<li><a href="https://github.com/rjdemetra/rjdemetra3/issues" class="external-link">Report a bug</a></li>
+<li><a href="https://github.com/rjdverse/rjd3workspace/" class="external-link">Browse source code</a></li>
+<li><a href="https://github.com/rjdverse/rjd3workspace/issues" class="external-link">Report a bug</a></li>
 </ul>
 </div>
 
 <div class="license">
 <h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
-<li>EUPL</li>
+<li>file <a href="LICENSE-text.html">LICENSE</a>
+</li>
 </ul>
 </div>
 
@@ -156,42 +204,46 @@
 <div class="citation">
 <h2 data-toc-skip>Citation</h2>
 <ul class="list-unstyled">
-<li><a href="authors.html#citation">Citing rjdemetra3</a></li>
+<li><a href="authors.html#citation">Citing rjd3workspace</a></li>
 </ul>
 </div>
 
 <div class="developers">
 <h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
-<li>Alain Quartier-la-Tente <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0001-7890-3857" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
-<li>Anna Michalek <br><small class="roles"> Author </small>  </li>
 <li>Jean Palate <br><small class="roles"> Author </small>  </li>
-<li>Raf Baeyens <br><small class="roles"> Author </small>  </li>
+<li>Alain Quartier-la-Tente <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0001-7890-3857" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li>Tanguy Barthelemy <br><small class="roles"> Author, maintainer, artist </small>  </li>
+<li>Anna Smyk <br><small class="roles"> Author </small>  </li>
 </ul>
 </div>
 
-
+<div class="dev-status">
+<h2 data-toc-skip>Dev status</h2>
+<ul class="list-unstyled">
+<li><a href="https://CRAN.R-project.org/package=rjd3workspace" class="external-link"><img src="https://www.r-pkg.org/badges/version/rjd3workspace" alt="CRAN status"></a></li>
+<li><a href="http://www.awesomeofficialstatistics.org" class="external-link"><img src="https://awesome.re/mentioned-badge.svg" alt="Mentioned in Awesome Official Statistics"></a></li>
+</ul>
+</div>
 
   </aside>
 </div>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p></p>
-<p>Developed by Alain Quartier-la-Tente, Anna Michalek, Jean Palate, Raf Baeyens.</p>
+  <p>Developed by Jean Palate, Alain Quartier-la-Tente, Tanguy Barthelemy, Anna Smyk.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
 </div>
 
     </footer>
 </div>
 
-  
 
-  
+
+
 
   </body>
 </html>
